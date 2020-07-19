@@ -33,6 +33,7 @@ public class MiniMax implements MoveStrategy {
                 board.currentPlayer().getLegalFromTaken(blackPiecesTaken);
     }
 
+    // TODO remake execute, take into consideration the taken pieces, when insert move, insert them into second board;
     @Override
     public Move execute(Board board, Collection<Piece> whitePiecesTaken, Collection<Piece> blackPiecesTaken) {
 

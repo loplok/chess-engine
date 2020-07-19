@@ -28,7 +28,7 @@ public class BugHouseGame {
         this.gameTwoBlackPieces = new ArrayList<>();
         this.gameTwoWhitePieces = new ArrayList<>();
 
-        playGame(depth);
+        //playGame(depth);
 
     }
 
@@ -59,6 +59,9 @@ public class BugHouseGame {
     private boolean isSecondFinished() {
         return secondBoard.getCurrentPlayer().isInCheckMate() || secondBoard.currentPlayer().isStalemate();
     }
+
+    /*
+    TODO REMAKE THIS WHOLE SECTION, HANDLE SENDING PIECES AFTER INSERT MOVE TO THE OTHER BOARD;
 
     private void playGame(int depth) {
 
@@ -106,6 +109,11 @@ public class BugHouseGame {
             System.out.println(firstBoard);
             System.out.println(secondBoard);
         }
+    }
+     */
+
+    public void playBugHouse() {
+
     }
 
 

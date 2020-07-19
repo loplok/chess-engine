@@ -14,9 +14,8 @@ public class Board {
 
     private final List<Tile> gameBoard;
 
-    private final Collection<Piece> whitePiecesOnBoard;
-    private final Collection<Piece> blackPiecesOnBoard;
-
+    private final Collection<Piece> whitePieces;
+    private final Collection<Piece> blackPieces;
 
 
     private final Pawn enPassantPawn;
@@ -30,13 +29,13 @@ public class Board {
 
     private Board(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
-        this.whitePiecesOnBoard = calculateActive(this.gameBoard, Alliance.WHITE);
-        this.blackPiecesOnBoard = calculateActive(this.gameBoard, Alliance.BLACK);
+        this.whitePieces = calculateActive(this.gameBoard, Alliance.WHITE);
+        this.blackPieces = calculateActive(this.gameBoard, Alliance.BLACK);
         this.enPassantPawn = builder.EnPassantPawn;
 
 
-        final Collection<Move> whiteLegalMoves = calculate(this.whitePiecesOnBoard);
-        final Collection<Move> blackLegalMoves = calculate(this.blackPiecesOnBoard);
+        final Collection<Move> whiteLegalMoves = calculate(this.whitePieces);
+        final Collection<Move> blackLegalMoves = calculate(this.blackPieces);
 
         this.white = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
         this.black = new BlackPlayer(this, blackLegalMoves, whiteLegalMoves);
@@ -47,6 +46,19 @@ public class Board {
     public Piece getPiece(final int coordinate) {
         return gameBoard.get(coordinate).getPiece();
     }
+
+
+
+
+    // setters for taken Pieces;
+    public void addWhitePiece(Piece whitePiece) {
+        this.whitePieces.add(whitePiece);
+    }
+
+    public void addBlackPiece(Piece blackPiece) {
+        this.blackPieces.add(blackPiece);
+    }
+
 
     @Override
     public String toString() {
@@ -74,11 +86,11 @@ public class Board {
     }
 
     public Collection<Piece> getBlackPieces() {
-        return this.blackPiecesOnBoard;
+        return this.blackPieces;
     }
 
     public Collection<Piece> getWhitePieces() {
-        return this.whitePiecesOnBoard;
+        return this.whitePieces;
     }
 
     public Collection<Tile> getUnoccupiedTiles() {
@@ -92,7 +104,7 @@ public class Board {
     }
 
     public Collection<Piece> getAllPieces() {
-        return (Collection<Piece>) Iterables.concat(this.whitePiecesOnBoard, this.blackPiecesOnBoard);
+        return (Collection<Piece>) Iterables.concat(this.whitePieces, this.blackPieces);
     }
 
     private Collection<Move> calculate(final Collection<Piece> pieces) {
