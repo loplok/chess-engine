@@ -17,13 +17,13 @@ public class Knight extends Piece {
     private final static int[] CANDIDATE_MOVES_COOR = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Knight(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance, PieceType.KNIGHT, true);
+        super(piecePosition, pieceAlliance, PieceType.KNIGHT, true, false);
     }
 
     public Knight(final Alliance pieceAlliance,
                 final int piecePosition,
-                final boolean isFirstMove) {
-        super(piecePosition, pieceAlliance, PieceType.KNIGHT, isFirstMove);
+                final boolean isFirstMove, boolean isTaken) {
+        super(piecePosition, pieceAlliance, PieceType.KNIGHT, isFirstMove, isTaken);
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {

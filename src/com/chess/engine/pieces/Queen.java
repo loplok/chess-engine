@@ -16,13 +16,14 @@ public class Queen extends Piece {
     private final static int[] CANDIDATE_MOVE_VECTOR = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public Queen(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance, PieceType.QUEEN, true);
+        super(piecePosition, pieceAlliance, PieceType.QUEEN, true, false);
     }
 
     public Queen(final Alliance pieceAlliance,
                 final int piecePosition,
-                final boolean isFirstMove) {
-        super(piecePosition, pieceAlliance, PieceType.QUEEN, isFirstMove);
+                final boolean isFirstMove,
+                 final boolean isTaken) {
+        super(piecePosition, pieceAlliance, PieceType.QUEEN, isFirstMove, isTaken);
     }
 
     @Override

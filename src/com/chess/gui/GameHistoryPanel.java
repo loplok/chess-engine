@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static com.chess.gui.Table.*;
 
-public class GameHistoryPanel extends JPanel {
+public class    GameHistoryPanel extends JPanel {
 
     private static final Dimension HISTORY_PANEL_SIZE = new Dimension(100,400);
     private final DataModel model;

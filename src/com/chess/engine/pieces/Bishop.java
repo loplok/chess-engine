@@ -16,14 +16,16 @@ public class Bishop extends Piece {
 
     private final static int[] CANDIDATE_MOVE_VECTOR = {-9, -7, 7, 9};
 
+
     public Bishop(int piecePosition, Alliance pieceAlliance) {
-        super( piecePosition, pieceAlliance, PieceType.BISHOP, true);
+        super( piecePosition, pieceAlliance, PieceType.BISHOP, true, false);
     }
 
     public Bishop(final Alliance pieceAlliance,
                 final int piecePosition,
-                final boolean isFirstMove) {
-        super(piecePosition, pieceAlliance, PieceType.BISHOP, isFirstMove);
+                final boolean isFirstMove,
+                  final boolean isTaken) {
+        super(piecePosition, pieceAlliance, PieceType.BISHOP, isFirstMove, isTaken);
     }
 
     @Override

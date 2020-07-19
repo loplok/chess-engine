@@ -11,18 +11,29 @@ public abstract class Piece {
     protected final Alliance pieceAlliance;
     protected final boolean isFirstMove;
     protected final PieceType pieceType;
+    protected boolean isTaken;
 
     private final int cashedCode;
 
     Piece(final int piecePosition,
           final Alliance pieceAlliance,
           final PieceType pieceType,
-          final boolean isFirstMove) {
+          final boolean isFirstMove, final boolean isTaken) {
         this.pieceAlliance = pieceAlliance;
         this.piecePosition = piecePosition;
         this.pieceType = pieceType;
         this.isFirstMove = isFirstMove;
         this.cashedCode = computeHashCode();
+        this.isTaken = isTaken;
+    }
+
+    // getter and setters for taken boolean of a piece
+    public boolean getIsTaken() {
+        return this.isTaken;
+    }
+
+    public void setIsTaken(boolean taken) {
+        this.isTaken = taken;
     }
 
 
@@ -60,11 +71,11 @@ public abstract class Piece {
 
     public  boolean isFirstMove() {
         return isFirstMove;
-    };
+    }
 
     public int  getPiecePosition() {
         return this.piecePosition;
-    };
+    }
 
     public PieceType getPieceType() {
         return this.pieceType;

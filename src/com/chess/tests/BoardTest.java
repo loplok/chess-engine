@@ -7,9 +7,10 @@ import com.chess.engine.board.Board.Builder;
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.pieces.*;
 import com.google.common.collect.Iterables;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 public class BoardTest {
@@ -30,4 +31,5 @@ public class BoardTest {
         assertFalse(board.currentPlayer().getOpponent().isCastled());
 
     }
+
 }

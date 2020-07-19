@@ -9,7 +9,6 @@ import com.chess.engine.pieces.Piece;
 import com.chess.engine.player.MoveTransition;
 import com.chess.engine.player.ai.MiniMax;
 import com.google.common.collect.Lists;
-import javafx.scene.control.Tab;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static javax.swing.SwingUtilities.*;
+
 
 public class Table extends Observable {
     private final Color lightTileColor = Color.decode("#FFFACD");

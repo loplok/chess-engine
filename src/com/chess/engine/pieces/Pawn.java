@@ -16,13 +16,13 @@ public class Pawn extends Piece {
 
 
     public Pawn(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance, PieceType.PAWN, true);
+        super(piecePosition, pieceAlliance, PieceType.PAWN, true, false);
     }
 
     public Pawn(final Alliance pieceAlliance,
                 final int piecePosition,
-                final boolean isFirstMove) {
-        super(piecePosition, pieceAlliance, PieceType.PAWN, isFirstMove);
+                final boolean isFirstMove, boolean isTaken) {
+        super(piecePosition, pieceAlliance, PieceType.PAWN, isFirstMove, isTaken);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Pawn extends Piece {
     }
 
     public Piece getPromotionPiece() {
-        return new Queen(this.pieceAlliance, this.piecePosition, false);
+        return new Queen(this.pieceAlliance, this.piecePosition, false, false);
     }
 
     @Override
