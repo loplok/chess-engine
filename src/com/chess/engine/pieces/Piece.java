@@ -5,6 +5,7 @@ import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,8 +39,16 @@ public abstract class Piece {
         this.isTaken = taken;
     }
 
-    public abstract Collection<Move> getLegalMovesFromTaken(Board board);
-
+    public Collection<Move> getLegalMovesFromTaken(Board board) throws UnsupportedOperationException{
+        List<Move> legalMovesFromTaken = new ArrayList<>();
+        if (isTaken) {
+            for (Tile tile: board.getUnoccupiedTiles()) {
+                legalMovesFromTaken.add(new Move.InsertMove(board, this, tile.getTileNumber()));
+            }
+            return legalMovesFromTaken;
+        }
+        else throw new UnsupportedOperationException("Should not get here, something went wrong");
+    }
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
     }

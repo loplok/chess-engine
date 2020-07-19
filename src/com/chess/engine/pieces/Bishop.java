@@ -50,38 +50,41 @@ public class Bishop extends Piece {
     public Collection<Move> calculateLegalMove(Board board) {
         final List<Move> legalMoves = new ArrayList<>();
 
-        for(final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR) {
-            int candidateDestination = this.piecePosition;
+        if(!isTaken) {
+            for (final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR) {
+                int candidateDestination = this.piecePosition;
 
-            while(BoardUtils.isValidTileCoordinate(candidateDestination)) {
-                // break out if exclusion, same as with Knight when the evaluation does not work
+                while (BoardUtils.isValidTileCoordinate(candidateDestination)) {
+                    // break out if exclusion, same as with Knight when the evaluation does not work
 
-                if(isFirstColumnExclusion(candidateDestination, candidateCoordinateOffset) ||
-                    isEightColumnExclusion(candidateDestination, candidateCoordinateOffset)) {
-                    break;
-                }
-
-                candidateDestination += candidateCoordinateOffset;
-                if(BoardUtils.isValidTileCoordinate(candidateDestination)) {
-                    final Tile candidateTile = board.getTile(candidateDestination);
-
-                    if (!candidateTile.isTileOccupied()) {
-                        legalMoves.add(new Move.MajorPieceMove(board, this, candidateDestination));
-                    } else {
-                        final Piece pieceAtDestination = candidateTile.getPiece();
-                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                        if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Move.AttackingMove(board, this, candidateDestination,
-                                    pieceAtDestination));
-                        }
+                    if (isFirstColumnExclusion(candidateDestination, candidateCoordinateOffset) ||
+                            isEightColumnExclusion(candidateDestination, candidateCoordinateOffset)) {
                         break;
+                    }
+
+                    candidateDestination += candidateCoordinateOffset;
+                    if (BoardUtils.isValidTileCoordinate(candidateDestination)) {
+                        final Tile candidateTile = board.getTile(candidateDestination);
+
+                        if (!candidateTile.isTileOccupied()) {
+                            legalMoves.add(new Move.MajorPieceMove(board, this, candidateDestination));
+                        } else {
+                            final Piece pieceAtDestination = candidateTile.getPiece();
+                            final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
+                            if (this.pieceAlliance != pieceAlliance) {
+                                legalMoves.add(new Move.AttackingMove(board, this, candidateDestination,
+                                        pieceAtDestination));
+                            }
+                            break;
+                        }
                     }
                 }
             }
+
+            return ImmutableList.copyOf(legalMoves);
+        } else {
+            return List.copyOf(getLegalMovesFromTaken(board));
         }
-
-        return ImmutableList.copyOf(legalMoves);
-
     }
 
 

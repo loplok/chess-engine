@@ -32,7 +32,7 @@ public class Pawn extends Piece {
 
     @Override
     public Pawn movePiece(Move move) {
-        return new Pawn( move.getDestinationCoordinate(), move.getPieceThatMoved().getPieceAlliance());
+        return new Pawn(move.getDestinationCoordinate(), move.getPieceThatMoved().getPieceAlliance());
     }
 
     public Piece getPromotionPiece() {
@@ -44,84 +44,84 @@ public class Pawn extends Piece {
 
         final List<Move> legalMoves = new ArrayList<>();
 
-        for(final int currentCandidate : CANDIDATE_MOVE_COORDINATE) {
+        if (!isTaken) {
+            for (final int currentCandidate : CANDIDATE_MOVE_COORDINATE) {
 
-            final int candidateDestination = this.piecePosition + this.getPieceAlliance().getDirection() * currentCandidate;
+                final int candidateDestination = this.piecePosition + this.getPieceAlliance().getDirection() * currentCandidate;
 
-            if (!BoardUtils.isValidTileCoordinate(candidateDestination)) {
-                continue;
-            }
-
-            if(currentCandidate == 8 && !board.getTile(candidateDestination).isTileOccupied()) {
-                if(this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
-                    legalMoves.add(new Move.PawnPromotion(new Move.PawnMove(board,this, candidateDestination)));
-                } else {
-                    legalMoves.add(new Move.PawnMove(board,this, candidateDestination));
+                if (!BoardUtils.isValidTileCoordinate(candidateDestination)) {
+                    continue;
                 }
-            }
-            else if(currentCandidate == 16 && this.isFirstMove() &&
-                    ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack())
-                    || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
-                final int tileBehindTheCandidate = this.piecePosition + this.pieceAlliance.getDirection() * 8;
-                if (!board.getTile(tileBehindTheCandidate).isTileOccupied() &&
-                        !board.getTile(tileBehindTheCandidate).isTileOccupied()) {
-                    legalMoves.add(new Move.PawnJump(board, this, candidateDestination));
-                }
-            }
-            // when pawn attacks, it does so in a diagonal, but only one tile in front of him. this solves it, not clean,
-            // will rewrite or make it clearer to the reader;
-            else if(currentCandidate == 7 &&
-                    !((BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
-                            (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
-                if(board.getTile(candidateDestination).isTileOccupied()) {
-                    final Piece pieceOnCandidate = board.getTile(candidateDestination).getPiece();
-                    if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
-                        if(this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
-                            legalMoves.add(new Move.PawnPromotion(new Move.PawnAttackMove(board,this,
-                                    candidateDestination, pieceOnCandidate)));
-                        } else {
-                            legalMoves.add(new Move.PawnAttackMove(board,this, candidateDestination, pieceOnCandidate));
-                        }
+
+                if (currentCandidate == 8 && !board.getTile(candidateDestination).isTileOccupied()) {
+                    if (this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
+                        legalMoves.add(new Move.PawnPromotion(new Move.PawnMove(board, this, candidateDestination)));
+                    } else {
+                        legalMoves.add(new Move.PawnMove(board, this, candidateDestination));
+                    }
+                } else if (currentCandidate == 16 && this.isFirstMove() &&
+                        ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack())
+                                || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
+                    final int tileBehindTheCandidate = this.piecePosition + this.pieceAlliance.getDirection() * 8;
+                    if (!board.getTile(tileBehindTheCandidate).isTileOccupied() &&
+                            !board.getTile(tileBehindTheCandidate).isTileOccupied()) {
+                        legalMoves.add(new Move.PawnJump(board, this, candidateDestination));
                     }
                 }
-                    else if(board.getEnPassantPawn()!=null) {
-                        if(board.getEnPassantPawn().getPiecePosition() == (this.piecePosition +
-                                this.pieceAlliance.getOppositeDirection())) {
-                            final Piece pieceOnCandidate = board.getEnPassantPawn();
-                                if(this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
-                                    legalMoves.add(new Move.PawnEnPassantAttackMove(board, this,
-                                            candidateDestination, pieceOnCandidate));
-                                }
-                        }
-                    }
-                }
-            else if(currentCandidate == 9 &&
-                            !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
-                                    (BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
-                    if(board.getTile(candidateDestination).isTileOccupied()) {
+                // when pawn attacks, it does so in a diagonal, but only one tile in front of him. this solves it, not clean,
+                // will rewrite or make it clearer to the reader;
+                else if (currentCandidate == 7 &&
+                        !((BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
+                                (BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
+                    if (board.getTile(candidateDestination).isTileOccupied()) {
                         final Piece pieceOnCandidate = board.getTile(candidateDestination).getPiece();
-                        if(this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
-                            if(this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
-                                legalMoves.add(new Move.PawnPromotion(new Move.PawnAttackMove(board,this,
+                        if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                            if (this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
+                                legalMoves.add(new Move.PawnPromotion(new Move.PawnAttackMove(board, this,
                                         candidateDestination, pieceOnCandidate)));
                             } else {
-                                legalMoves.add(new Move.PawnAttackMove(board,this, candidateDestination,
-                                        pieceOnCandidate));
+                                legalMoves.add(new Move.PawnAttackMove(board, this, candidateDestination, pieceOnCandidate));
                             }
                         }
-                    }
-                    else if(board.getEnPassantPawn()!=null) {
-                        if(board.getEnPassantPawn().getPiecePosition() == (this.piecePosition -
+                    } else if (board.getEnPassantPawn() != null) {
+                        if (board.getEnPassantPawn().getPiecePosition() == (this.piecePosition +
                                 this.pieceAlliance.getOppositeDirection())) {
                             final Piece pieceOnCandidate = board.getEnPassantPawn();
-                            if(this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                            if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
                                 legalMoves.add(new Move.PawnEnPassantAttackMove(board, this,
                                         candidateDestination, pieceOnCandidate));
                             }
                         }
                     }
+                } else if (currentCandidate == 9 &&
+                        !((BoardUtils.FIRST_COLUMN[this.piecePosition] && this.pieceAlliance.isWhite() ||
+                                (BoardUtils.EIGHT_COLUMN[this.piecePosition] && this.pieceAlliance.isBlack())))) {
+                    if (board.getTile(candidateDestination).isTileOccupied()) {
+                        final Piece pieceOnCandidate = board.getTile(candidateDestination).getPiece();
+                        if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                            if (this.pieceAlliance.isPawnPromotionSquare(candidateDestination)) {
+                                legalMoves.add(new Move.PawnPromotion(new Move.PawnAttackMove(board, this,
+                                        candidateDestination, pieceOnCandidate)));
+                            } else {
+                                legalMoves.add(new Move.PawnAttackMove(board, this, candidateDestination,
+                                        pieceOnCandidate));
+                            }
+                        }
+                    } else if (board.getEnPassantPawn() != null) {
+                        if (board.getEnPassantPawn().getPiecePosition() == (this.piecePosition -
+                                this.pieceAlliance.getOppositeDirection())) {
+                            final Piece pieceOnCandidate = board.getEnPassantPawn();
+                            if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                                legalMoves.add(new Move.PawnEnPassantAttackMove(board, this,
+                                        candidateDestination, pieceOnCandidate));
+                            }
+                        }
+                    }
+                }
             }
+            return ImmutableList.copyOf(legalMoves);
+        } else {
+            return List.copyOf(getLegalMovesFromTaken(board));
         }
-        return ImmutableList.copyOf(legalMoves);
     }
 }

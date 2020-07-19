@@ -59,6 +59,7 @@ public class Knight extends Piece {
 
         final List<Move> legalMoves = new ArrayList<>();
 
+        if(!isTaken) {
         for (final int currentCandidatesOffset : CANDIDATE_MOVES_COOR) {
             int candidateDestination = this.piecePosition + currentCandidatesOffset;
 
@@ -86,10 +87,10 @@ public class Knight extends Piece {
                 }
             }
             return ImmutableList.copyOf(legalMoves);
+        } else {
+            return List.copyOf(getLegalMovesFromTaken(board));
         }
-
-
-
+    }
 
 }
 

@@ -65,13 +65,13 @@ public class Rook extends Piece {
                     }
                 }
             }
+            return List.copyOf(legalMoves);
         }
         // if is not on board, calculate all possible
         else {
-            List.copyOf(getLegalMovesFromTaken(board));
+             return List.copyOf(getLegalMovesFromTaken(board));
         }
 
-        return List.copyOf(legalMoves);
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
@@ -82,17 +82,7 @@ public class Rook extends Piece {
         return BoardUtils.EIGHT_COLUMN[currentPosition] && (candidateOffset ==  1);
     }
 
-    @Override
-    public Collection<Move> getLegalMovesFromTaken(Board board) throws UnsupportedOperationException{
-        List<Move> legalMovesFromTaken = new ArrayList<>();
-        if (isTaken) {
-            for (Tile tile: board.getUnoccupiedTiles()) {
-                legalMovesFromTaken.add(new Move.InsertMove(board, this, tile.getTileNumber()));
-            }
-            return legalMovesFromTaken;
-        }
-        else throw new UnsupportedOperationException("Should not get here, something went wrong");
-    }
+
 
 
 }
