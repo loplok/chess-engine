@@ -59,6 +59,8 @@ public abstract class Player {
 
     public abstract Collection<Piece> getActivePieces();
 
+    public abstract Collection<Piece> getTakenPieces();
+
 
     public abstract Alliance getAlliance();
 

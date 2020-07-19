@@ -24,6 +24,17 @@ public class WhitePlayer extends Player {
     }
 
     @Override
+    public Collection<Piece> getTakenPieces() {
+        List<Piece> takenPieces = new ArrayList<>();
+        for (Piece piece: playBoard.getWhitePieces()) {
+            if(piece.getIsTaken()) {
+                takenPieces.add(piece);
+            }
+        }
+        return takenPieces;
+    }
+
+    @Override
     public Alliance getAlliance() {
         return Alliance.WHITE;
     }
