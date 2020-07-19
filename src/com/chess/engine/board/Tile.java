@@ -10,9 +10,9 @@ import static com.chess.engine.board.BoardUtils.NUM_TILES;
 
 public abstract class Tile  {
     protected final int tileNumber;
-    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllEmptyFiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllEmptyTiles();
 
-    private static Map<Integer,EmptyTile> createAllEmptyFiles() {
+    private static Map<Integer,EmptyTile> createAllEmptyTiles() {
         final Map<Integer,EmptyTile> emptyTileMap = new HashMap<>();
 
         for (int i =0; i < NUM_TILES; i++) {

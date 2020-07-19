@@ -81,6 +81,15 @@ public class Board {
         return this.whitePiecesOnBoard;
     }
 
+    public Collection<Tile> getUnoccupiedTiles() {
+        Collection<Tile> unoccupiedTiles = new ArrayList<>();
+        for (final Tile tile: gameBoard) {
+            if (!tile.isTileOccupied()) {
+                unoccupiedTiles.add(tile);
+            }
+        }
+        return unoccupiedTiles;
+    }
 
     public Collection<Piece> getAllPieces() {
         return (Collection<Piece>) Iterables.concat(this.whitePiecesOnBoard, this.blackPiecesOnBoard);

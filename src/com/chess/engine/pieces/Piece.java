@@ -3,8 +3,10 @@ package com.chess.engine.pieces;
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Tile;
 
 import java.util.Collection;
+import java.util.List;
 
 public abstract class Piece {
     protected final int piecePosition;
@@ -36,6 +38,7 @@ public abstract class Piece {
         this.isTaken = taken;
     }
 
+    public abstract Collection<Move> getLegalMovesFromTaken(Board board);
 
     public Alliance getPieceAlliance() {
         return this.pieceAlliance;
@@ -45,6 +48,7 @@ public abstract class Piece {
 
     public abstract  Collection<Move> calculateLegalMove(final Board board);
 
+    // hashing, TODO finish hasing everything correctly
     @Override
     public boolean equals(final Object toCompare) {
         if(this==toCompare) {
@@ -67,6 +71,10 @@ public abstract class Piece {
         result = 31*result + (isFirstMove ? 1 : 0);
         return result;
     }
+
+
+
+
 
 
     public  boolean isFirstMove() {
@@ -200,6 +208,7 @@ public abstract class Piece {
         public abstract boolean isKing();
 
         public abstract boolean isRook();
+
 
         public  int getPieceValue() {
             return this.value;
