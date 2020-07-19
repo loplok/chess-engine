@@ -27,7 +27,7 @@ public class WhitePlayer extends Player {
     public Collection<Piece> getTakenPieces() {
         List<Piece> takenPieces = new ArrayList<>();
         for (Piece piece: playBoard.getWhitePieces()) {
-            if(piece.getIsTaken()) {
+            if (piece.getIsTaken()) {
                 takenPieces.add(piece);
             }
         }
