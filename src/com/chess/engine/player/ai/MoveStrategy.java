@@ -8,5 +8,5 @@ import java.util.Collection;
 
 public interface MoveStrategy {
 
-    Move execute(Board board, Collection<Piece> whitePiecesTaken, Collection<Piece> blackPiecesTaken);
+    Move execute(Board board);
 }
