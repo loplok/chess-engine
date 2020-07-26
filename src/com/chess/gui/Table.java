@@ -211,7 +211,7 @@ public class Table extends Observable {
         @Override
         protected Move doInBackground() throws Exception {
             MiniMax mini = new MiniMax(4);
-            final Move best = mini.execute(Table.get().getGameBoard(), Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+            final Move best = mini.execute(Table.get().getGameBoard());
             return best;
         }
 
@@ -221,7 +221,7 @@ public class Table extends Observable {
                 final Move best = get();
 
                 Table.get().updateComputer(best);
-                Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(best).getTransitionBoardBoard());
+                Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(best).getTransitionBoard());
                 Table.get().getMoveLog().addMove(best);
                 Table.get().getGameHistory().redo(Table.get().getGameBoard(), Table.get().getMoveLog());
                 Table.get().getPiecesPanel().redo(Table.get().getMoveLog());
@@ -380,7 +380,7 @@ public class Table extends Observable {
                                     destinationTile.getTileNumber());
                             final MoveTransition trans = chessBoard.currentPlayer().makeMove(move);
                             if(trans.getMoveStatus().isDone()) {
-                                chessBoard = trans.getTransitionBoardBoard();
+                                chessBoard = trans.getTransitionBoard();
                                 log.addMove(move);
                                 System.out.println("done");
                             }

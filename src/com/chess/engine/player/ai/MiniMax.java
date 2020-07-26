@@ -19,6 +19,7 @@ public class MiniMax implements MoveStrategy {
     private final int depth;
     private int quiescenceCount;
     private static final int QUIESCENCE = 10000;
+    private int numBoardsEvaluated = 0;
 
     public MiniMax(final int depth) {
         this.boardEvaluator =new StandardBoardEvaluator();
@@ -31,38 +32,33 @@ public class MiniMax implements MoveStrategy {
         return "MiniMax";
     }
 
-    public Collection<Move> getTakenPiecesMove(Board board,Collection<Piece> whitePiecesTaken, Collection<Piece> blackPiecesTaken ) {
-        return (board.currentPlayer().getAlliance().isWhite()) ?
-                board.currentPlayer().getLegalFromTaken(whitePiecesTaken) :
-                board.currentPlayer().getLegalFromTaken(blackPiecesTaken);
-    }
 
     // TODO remake execute, take into consideration the taken pieces, when insert move, insert them into second board;
     @Override
     public Move execute(Board board) {
 
         // final long startTime = System.currentTimeMillis();
-
-        Move bestMove = null;
-        int highestSeenValue = Integer.MIN_VALUE;
-        int lowestSeenValue = Integer.MAX_VALUE;
         int current;
+        Move bestMove = null;
+        int highest = Integer.MIN_VALUE;
+        int lowest = Integer.MAX_VALUE;
+
 
         for (Move move: board.getCurrentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if (moveTransition.getMoveStatus().isDone()) {
                 current = board.getCurrentPlayer().getAlliance().isWhite() ?
-                        min(moveTransition.getTransitionBoard(), this.depth - 1, highestSeenValue, lowestSeenValue) :
-                        max(moveTransition.getTransitionBoard(), this.depth - 1, highestSeenValue, lowestSeenValue);
-                if (board.getCurrentPlayer().getAlliance().isWhite() && current > highestSeenValue) {
-                    highestSeenValue = current;
+                        min(moveTransition.getTransitionBoard(), this.depth - 1, highest, lowest) :
+                        max(moveTransition.getTransitionBoard(), this.depth - 1, highest, lowest);
+                if (board.getCurrentPlayer().getAlliance().isWhite() && current > highest) {
+                    highest = current;
                     bestMove = move;
                     if(moveTransition.getTransitionBoard().blackPlayer().isInCheckMate()) {
                         break;
                     }
                 }
-                else if (board.getCurrentPlayer().getAlliance().isBlack() && current < lowestSeenValue) {
-                    lowestSeenValue = current;
+                else if (board.getCurrentPlayer().getAlliance().isBlack() && current < lowest) {
+                    lowest = current;
                     bestMove = move;
                     if(moveTransition.getTransitionBoard().whitePlayer().isInCheckMate()) {
                         break;
@@ -70,6 +66,7 @@ public class MiniMax implements MoveStrategy {
                 }
             }
         }
+        System.out.println(this.numBoardsEvaluated);
         return bestMove;
     }
 
@@ -79,6 +76,7 @@ public class MiniMax implements MoveStrategy {
                     final int highest,
                     final int lowest) {
         if (depth == 0) {
+            this.numBoardsEvaluated++;
             return this.boardEvaluator.evaluate(board, depth);
         }
         int currentLowest = lowest;
@@ -95,9 +93,10 @@ public class MiniMax implements MoveStrategy {
         }
         return currentLowest;
     }
+
     /*
-    private int calculateQuiescenceDepth(final Board toBoard,
-                                         final int depth) {
+    private int quiescenceSearch(final Board toBoard,
+                                 final int depth) {
         if(depth == 1 && this.quiescenceCount < QUIESCENCE) {
             int activityMeasure = 0;
             if (toBoard.currentPlayer().isInCheck()) {
@@ -114,17 +113,15 @@ public class MiniMax implements MoveStrategy {
         }
         return depth - 1;
     }
-    */
+     */
 
-    private boolean isItEndOfGame(Board board) {
-        return board.currentPlayer().isInCheckMate() || board.currentPlayer().isStalemate();
-    }
 
     private int max(final Board board,
                     final int depth,
                     final int highest,
                     final int lowest) {
         if (depth == 0) {
+            this.numBoardsEvaluated++;
             return this.boardEvaluator.evaluate(board, depth);
         }
         int currentHighest = highest;

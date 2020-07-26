@@ -457,6 +457,7 @@ public abstract class Move {
     public static class InsertMove extends Move {
         public InsertMove(Board board, Piece piece, int piecePos) {
             super(board, piece, piecePos);
+            piece.setIsTaken(false);
         }
 
         @Override

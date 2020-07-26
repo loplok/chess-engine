@@ -8,16 +8,16 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
 
     private static final int CHECK_SCORE = 35;
-    private static final int CHECK_MATE_SCORE = 50000;
+    private static final int CHECK_MATE_SCORE = 5000000;
 
     @Override
-    public double evaluate(Board board, int depth) {
-        return (scorePlayer(board, board.whitePlayer(), depth) - scorePlayer(board, board.blackPlayer(), depth))*0.01;
+    public int evaluate(Board board, int depth) {
+        return (scorePlayer(board, board.whitePlayer(), depth) - scorePlayer(board, board.blackPlayer(), depth));
     }
 
 
 
-    private double scorePlayer(Board board, Player player, int depth) {
+    private int scorePlayer(Board board, Player player, int depth) {
         return (pieceValue(player) + mobility(player) + check(player) + checkMate(player, depth) + castled(player)
                 + pawnStructure(player));
     }
@@ -45,9 +45,9 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
     }
 
-    private double mobility(Player player) {
+    private int mobility(Player player) {
 
-        return player.getLegalMoves().size()*0.35;
+        return player.getLegalMoves().size()*35;
     }
 
     private static int pieceValue(final Player player) {

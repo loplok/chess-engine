@@ -31,6 +31,16 @@ public abstract class Player {
 
     }
 
+    public void addWhitePiece(Piece whitePiece) {
+        whitePiece.setIsTaken(true);
+        this.playBoard.addWhitePiece(whitePiece);
+    }
+
+    public void addBlackPiece(Piece blackPiece) {
+        blackPiece.setIsTaken(true);
+        this.playBoard.addWhitePiece(blackPiece);
+    }
+
     protected static Collection<Move> calculateAttacks(int piecePosition,
                                             Collection<Move> opponentMoves) {
         final List<Move> attackMove = new ArrayList<>();

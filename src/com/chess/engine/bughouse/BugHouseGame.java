@@ -15,40 +15,15 @@ public class BugHouseGame {
 
     private Board firstBoard;
     private Board secondBoard;
-    private List<Piece> gameOneBlackPieces;
-    private List<Piece> gameOneWhitePieces;
-    private List<Piece> gameTwoBlackPieces;
-    private List<Piece> gameTwoWhitePieces;
+
 
     public BugHouseGame(Board firstGame, Board secondGame, int depth) {
         this.firstBoard = firstGame;
         this.secondBoard = secondGame;
-        this.gameOneBlackPieces = new ArrayList<>();
-        this.gameOneWhitePieces = new ArrayList<>();
-        this.gameTwoBlackPieces = new ArrayList<>();
-        this.gameTwoWhitePieces = new ArrayList<>();
-
-        //playGame(depth);
-
+        playGame(depth);
     }
 
-    public void printTaken() {
-        for(Piece piece: gameOneBlackPieces) {
-            System.out.print(piece.getPieceType().toString() + " ");
-        }
-        System.out.println();
-        for(Piece piece: gameOneWhitePieces) {
-            System.out.print(piece.getPieceType().toString() + " ");
-        }
-        System.out.println();
-        for(Piece piece: gameTwoBlackPieces) {
-            System.out.print(piece.getPieceType().toString() + " ");
-        }
-        System.out.println();
-        for(Piece piece: gameTwoWhitePieces) {
-            System.out.print(piece.getPieceType().toString() + " ");
-        }
-    }
+
 
 
 
@@ -60,63 +35,47 @@ public class BugHouseGame {
         return secondBoard.getCurrentPlayer().isInCheckMate() || secondBoard.currentPlayer().isStalemate();
     }
 
-    /*
-    TODO REMAKE THIS WHOLE SECTION, HANDLE SENDING PIECES AFTER INSERT MOVE TO THE OTHER BOARD;
+
+   // TODO REMAKE THIS WHOLE SECTION, HANDLE SENDING PIECES AFTER INSERT MOVE TO THE OTHER BOARD;
 
     private void playGame(int depth) {
 
         while (!isFirstFinished() && !isSecondFinished()) {
             final MoveStrategy strat = new MiniMax(depth);
             //find Moves for both games;
-                final Move move = strat.execute(this.firstBoard, this.gameTwoWhitePieces, this.gameTwoBlackPieces);
-                final Move moveOnSecondBoard = strat.execute(this.secondBoard, this.gameOneWhitePieces, this.gameOneBlackPieces);
+                final Move move = strat.execute(this.firstBoard);
+                final Move moveOnSecondBoard = strat.execute(this.secondBoard);
 
-            // if is capture, add it to the second game for next usage;
-            System.out.println(move.toString());
             if (move.isAttacked()) {
                 Piece piece = move.getAttackedPiece();
                 Alliance alliance = move.getBoard().currentPlayer().getAlliance();
                 if (alliance == Alliance.BLACK) {
-                    gameTwoWhitePieces.add(piece);
+                    secondBoard.addWhitePiece(piece);
                 } else {
-                    gameTwoBlackPieces.add(piece);
+                    secondBoard.addBlackPiece(piece);
                 }
             }
-            // same for the other game, if is capture, add the piece to partners availability;
+
             if (moveOnSecondBoard.isAttacked()) {
                 Piece pieceOnSecondBoard = moveOnSecondBoard.getAttackedPiece();
                 if (secondBoard.currentPlayer().getAlliance() == Alliance.BLACK) {
-                    gameOneWhitePieces.add(pieceOnSecondBoard);
+                    firstBoard.addWhitePiece(pieceOnSecondBoard);
                 } else {
-                    gameOneBlackPieces.add(pieceOnSecondBoard);
+                    firstBoard.addBlackPiece(pieceOnSecondBoard);
                 }
             }
 
-            if(move.isInsertMove() || moveOnSecondBoard.isInsertMove()) {
-                System.out.println("Insert move");
-            }
-            if(move.isAttacked() || moveOnSecondBoard.isAttacked()) {
-                System.out.println("Taking a piece move");
-            }
-
-            System.out.println(firstBoard.currentPlayer().toString() + "made move " + move.toString());
-            System.out.println(secondBoard.currentPlayer().toString() + "made move " + moveOnSecondBoard.toString());
+            //System.out.println(firstBoard.currentPlayer().toString() + "made move " + move.toString());
+            // System.out.println(secondBoard.currentPlayer().toString() + "made move " + moveOnSecondBoard.toString());
             // execute both moves;
             MoveTransition trans = firstBoard.currentPlayer().makeMove(move);
             MoveTransition tranSecondBoard = secondBoard.currentPlayer().makeMove(moveOnSecondBoard);
-            firstBoard = trans.getTransitionBoardBoard();
-            secondBoard = tranSecondBoard.getTransitionBoardBoard();
+            firstBoard = trans.getTransitionBoard();
+            secondBoard = tranSecondBoard.getTransitionBoard();
             System.out.println(firstBoard);
             System.out.println(secondBoard);
         }
     }
-     */
-
-    public void playBugHouse() {
-
-    }
-
-
-
+ 
 }
 
