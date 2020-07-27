@@ -19,7 +19,7 @@ public class Board {
 
 
     private final Pawn enPassantPawn;
-
+    private final Move transitionMove;
 
     private final Player currentPlayer;
 
@@ -40,6 +40,7 @@ public class Board {
         this.white = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
         this.black = new BlackPlayer(this, blackLegalMoves, whiteLegalMoves);
 
+        this.transitionMove = builder.transitionMove != null ? builder.transitionMove : Move.MoveFactory.getNullMove();
         this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer(), this.blackPlayer());
     }
 
@@ -238,12 +239,17 @@ public class Board {
         return Iterables.unmodifiableIterable(Iterables.concat(this.white.getLegalMoves(), this.black.getLegalMoves()));
     }
 
+    public Move getTransitionMove() {
+        return this.transitionMove;
+    }
+
     public Pawn getEnPassantPawn() {
         return this.enPassantPawn;
     }
 
     public static class Builder {
 
+        Move transitionMove;
         Alliance nextMoveMaker;
         Map<Integer, Piece> boardConfig;
         Pawn EnPassantPawn;
@@ -257,6 +263,10 @@ public class Board {
             return this;
         }
 
+        public Builder setMoveTransition(final Move transitionMove) {
+            this.transitionMove = transitionMove;
+            return this;
+        }
 
         public Builder setMoveMaker(final Alliance alliance) {
             this.nextMoveMaker = alliance;

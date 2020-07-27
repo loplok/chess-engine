@@ -4,8 +4,7 @@ import com.chess.engine.pieces.King;
 import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BoardUtils {
 
@@ -96,5 +95,17 @@ public class BoardUtils {
         return piece != null &&
                 piece.getPieceType().isPawn() &&
                 piece.getPieceAlliance() != king.getPieceAlliance();
+    }
+
+    public static List<Move> lastNMoves(final Board board, int N) {
+        final List<Move> moveHistory = new ArrayList<>();
+        Move currentMove = board.getTransitionMove();
+        int i = 0;
+        while( i < N) {
+            moveHistory.add(currentMove);
+            currentMove = currentMove.getBoard().getTransitionMove();
+            i++;
+        }
+        return Collections.unmodifiableList(moveHistory);
     }
 }

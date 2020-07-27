@@ -529,5 +529,10 @@ public abstract class Move {
 
             return NULL_MOVE;
         }
+
+        public static Move getNullMove() {
+            return NULL_MOVE;
+        }
+
     }
 }

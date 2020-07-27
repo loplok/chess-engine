@@ -140,21 +140,4 @@ public abstract class Player {
 
     protected abstract Collection<Move> calculateKingCastle(Collection<Move> moves,Collection<Move> opponentsMoves);
 
-    public Collection<Move> getLegalFromTaken(Collection<Piece> taken) {
-        ArrayList<Move> insertMoves = new ArrayList<>();
-
-        for(Piece piece: taken) {
-            for(int i = 0; i < BoardUtils.NUM_TILES; i++) {
-                if(!playBoard.getTile(i).isTileOccupied()) {
-                    if(!piece.getPieceType().isPawn()) {
-
-                        insertMoves.add(new Move.InsertMove(playBoard, piece, i));
-                    } else if(i > 7 && i < 57) {
-                        insertMoves.add(new Move.InsertMove(playBoard, piece, i));
-                    }
-                }
-            }
-        }
-        return insertMoves;
-    }
 }
