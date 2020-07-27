@@ -9,9 +9,7 @@ import com.chess.engine.player.MoveTransition;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.Iterables;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class MiniMax implements MoveStrategy {
 
@@ -42,8 +40,8 @@ public class MiniMax implements MoveStrategy {
         Move bestMove = null;
         int highest = Integer.MIN_VALUE;
         int lowest = Integer.MAX_VALUE;
-
-
+        HashMap<Integer, Move> map = new HashMap<>();
+        int sizeOfMoves = board.getCurrentPlayer().getLegalMoves().size();
         for (Move move: board.getCurrentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if (moveTransition.getMoveStatus().isDone()) {
@@ -64,6 +62,7 @@ public class MiniMax implements MoveStrategy {
                         break;
                     }
                 }
+                map.put(this.boardEvaluator.evaluate(moveTransition.getTransitionBoard(), 0), move);
             }
         }
         System.out.println(this.numBoardsEvaluated);

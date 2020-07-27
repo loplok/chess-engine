@@ -104,9 +104,6 @@ public class Board {
         return unoccupiedTiles;
     }
 
-    public Collection<Piece> getAllPieces() {
-        return (Collection<Piece>) Iterables.concat(this.whitePieces, this.blackPieces);
-    }
 
     private Collection<Move> calculate(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
@@ -127,7 +124,7 @@ public class Board {
                 }
             }
         }
-        return ImmutableList.copyOf(activeOnBoard);
+        return activeOnBoard;
     }
 
 

@@ -45,9 +45,11 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
     }
 
+
+
     private int mobility(Player player) {
 
-        return player.getLegalMoves().size()*35;
+        return player.getLegalMoves().size()*5;
     }
 
     private static int pieceValue(final Player player) {
@@ -55,7 +57,6 @@ public class StandardBoardEvaluator implements BoardEvaluator {
         for(final Piece piece: player.getActivePieces()) {
             pieceScore+=piece.getPieceValue();
         }
-
         return pieceScore;
     }
 
