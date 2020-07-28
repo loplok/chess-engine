@@ -1,6 +1,7 @@
 package com.chess.engine.player.ai;
 
 import com.chess.engine.board.Board;
+import com.chess.engine.pieces.Pawn;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.player.Player;
 
@@ -9,6 +10,7 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
     private static final int CHECK_SCORE = 35;
     private static final int CHECK_MATE_SCORE = 5000000;
+    private static final PawnAnalyzer INSTANCE = PawnAnalyzer.get();
 
     @Override
     public int evaluate(Board board, int depth) {
@@ -20,6 +22,11 @@ public class StandardBoardEvaluator implements BoardEvaluator {
     private int scorePlayer(Board board, Player player, int depth) {
         return (pieceValue(player) + mobility(player) + check(player) + checkMate(player, depth) + castled(player)
                 + pawnStructure(player));
+    }
+
+    private int pawnScore(Board board, Player player, int depth) {
+        return INSTANCE.pawnStructureScore(player) + INSTANCE.doubledPawnPenalty(player)
+                + INSTANCE.isolatedPawnPenalty(player);
     }
 
 
