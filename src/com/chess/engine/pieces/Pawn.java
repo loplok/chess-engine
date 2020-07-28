@@ -60,8 +60,8 @@ public class Pawn extends Piece {
                         legalMoves.add(new Move.PawnMove(board, this, candidateDestination));
                     }
                 } else if (currentCandidate == 16 && this.isFirstMove() &&
-                        ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isWhite())
-                                || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isBlack()))) {
+                        ((BoardUtils.SECOND_ROW[this.piecePosition] && this.pieceAlliance.isBlack())
+                                || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
                     final int tileBehindTheCandidate = this.piecePosition + this.pieceAlliance.getDirection() * 8;
                     if (!board.getTile(tileBehindTheCandidate).isTileOccupied() &&
                             !board.getTile(tileBehindTheCandidate).isTileOccupied()) {

@@ -28,7 +28,6 @@ public abstract class Player {
         this.king = createKing();
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastle(legalMoves,opponentsMoves)));
         this.isInCheck = !calculateAttacks(this.king.getPiecePosition(), opponentsMoves).isEmpty();
-
     }
 
     public void addWhitePiece(Piece whitePiece) {
@@ -77,9 +76,6 @@ public abstract class Player {
     public abstract Player getOpponent();
 
     private boolean isMoveLegal(Move m) {
-        if(m.isInsertMove()) {
-            return true;
-        }
         return this.legalMoves.contains(m);
     }
 
@@ -100,8 +96,7 @@ public abstract class Player {
             }
         }
         return false;
-
-    };
+    }
 
     public boolean isStalemate() {
         return !this.isInCheck && !hasMovesLeft();
@@ -112,9 +107,6 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(final Move move) {
-        if(move.isInsertMove()) {
-            return new MoveTransition(this.playBoard, move, MoveStatus.DONE);
-        }
         if(!isMoveLegal(move)) {
             return new MoveTransition(this.playBoard,
                     move,  MoveStatus.ILLEGAL_MOVE);

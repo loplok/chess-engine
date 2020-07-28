@@ -29,6 +29,7 @@ public class BoardUtils {
     private static final String[] ALGEBRAIC_NOTATION = initializeAlgebraicNotation();
     public static final Map<String, Integer> POSITION_TO_COORDINATE = initializePositionToCoordinate();
 
+
     private static boolean[] initRow(int initNumber) {
         final boolean[] rows = new boolean[NUM_TILES];
         do {

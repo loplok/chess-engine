@@ -10,25 +10,17 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
     private static final int CHECK_SCORE = 35;
     private static final int CHECK_MATE_SCORE = 5000000;
-    private static final PawnAnalyzer INSTANCE = PawnAnalyzer.get();
 
     @Override
     public int evaluate(Board board, int depth) {
-        return (scorePlayer(board, board.whitePlayer(), depth) - scorePlayer(board, board.blackPlayer(), depth));
+        return (scorePlayer(board.whitePlayer(), depth) - scorePlayer(board.blackPlayer(), depth));
     }
 
 
-
-    private int scorePlayer(Board board, Player player, int depth) {
+    private int scorePlayer(Player player, int depth) {
         return (pieceValue(player) + mobility(player) + check(player) + checkMate(player, depth) + castled(player)
                 + pawnStructure(player));
     }
-
-    private int pawnScore(Board board, Player player, int depth) {
-        return INSTANCE.pawnStructureScore(player) + INSTANCE.doubledPawnPenalty(player)
-                + INSTANCE.isolatedPawnPenalty(player);
-    }
-
 
     private static int pawnStructure(final Player player) {
         return PawnAnalyzer.get().pawnStructureScore(player);

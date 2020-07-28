@@ -26,12 +26,12 @@ public class TestPieces {
     public void testMate() {
         final Board board = Board.createStandardBoard();
         final MoveTransition  transition = board.currentPlayer().makeMove(
-                Move.MoveFactory.createMove(board, BoardUtils.getCoordinateAtPosition("f2"), BoardUtils.getCoordinateAtPosition("f3")));
+                Move.MoveFactory.createMove(board, BoardUtils.getCoordinateAtPosition("f2"), BoardUtils.getCoordinateAtPosition("f4")));
 
         assertTrue(transition.getMoveStatus().isDone());
 
         final MoveTransition  transition2 = transition.getTransitionBoard().currentPlayer().makeMove(
-                Move.MoveFactory.createMove(transition.getTransitionBoard(), BoardUtils.getCoordinateAtPosition("e7"), BoardUtils.getCoordinateAtPosition("e5")));
+                Move.MoveFactory.createMove(transition.getTransitionBoard(), BoardUtils.getCoordinateAtPosition("f5"), BoardUtils.getCoordinateAtPosition("f7")));
 
         assertTrue(transition2.getMoveStatus().isDone());
 
@@ -41,11 +41,12 @@ public class TestPieces {
 
         assertTrue(transition3.getMoveStatus().isDone());
 
-        final MoveStrategy strat = new MiniMax(4);
+        final MoveStrategy strat = new MiniMax(2);
        final Move aiMove = strat.execute(transition3.getTransitionBoard());
         final Move best  = Move.MoveFactory.createMove(transition3.getTransitionBoard(),
                 BoardUtils.getCoordinateAtPosition("d8"), BoardUtils.getCoordinateAtPosition("h4"));
           assertEquals(best, aiMove);
+        System.out.println(board);
     }
 
     @Test

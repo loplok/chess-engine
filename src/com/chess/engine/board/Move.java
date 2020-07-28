@@ -119,7 +119,7 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return pieceThatMoved.getPieceType() + BoardUtils.getPositionAtCoordinate(this.destinationOfPiece);
+            return pieceThatMoved.getPieceType() + "x" + BoardUtils.getPositionAtCoordinate(this.destinationOfPiece);
         }
 
     }
@@ -293,6 +293,11 @@ public abstract class Move {
 
         }
 
+        @Override
+        public boolean equals(final Object other) {
+            return this == other || other instanceof PawnJump && super.equals(other);
+        }
+
     }
 
     public static class PawnPromotion extends Move {
@@ -398,20 +403,17 @@ public abstract class Move {
 
          @Override
          public Board execute() {
-             final Board.Builder builder= new Board.Builder();
-             for(final Piece piece: this.board.currentPlayer().getActivePieces()) {
-                 if (!this.pieceThatMoved.equals(piece) && this.pieceThatMoved.equals(castleRook)) {
+             final Board.Builder builder = new Board.Builder();
+             for (final Piece piece : this.board.getAllPieces()) {
+                 if (!this.pieceThatMoved.equals(piece) && !this.castleRook.equals(piece)) {
                      builder.setPiece(piece);
                  }
              }
-             for (final Piece piece: this.board.currentPlayer().getOpponent().getActivePieces()) {
-                 builder.setPiece(piece);
-             }
              builder.setPiece(this.pieceThatMoved.movePiece(this));
-             builder.setPiece(new Rook(this.castleRookHeadingTo,this.castleRook.getPieceAlliance()));
+             //calling movePiece here doesn't work, we need to explicitly create a new Rook
+             builder.setPiece(new Rook(this.castleRook.getPieceAlliance(), this.castleRookHeadingTo,false, false));
              builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
-             board.currentPlayer().getPlayerKing().setCastled(true);
-             System.out.println("CASTLING");
+             builder.setMoveTransition(this);
              return builder.build();
          }
      }
@@ -522,7 +524,8 @@ public abstract class Move {
         public static Move createMove(final Board board, final int currentCoordinate,
                                       final int destinateCoordinate) {
             for (final Move move: board.getAllMoves()) {
-                if(move.getDestinationCoordinate() == destinateCoordinate) {
+                if(move.getDestinationCoordinate() == destinateCoordinate &&
+                        move.getCurrentCoordinate() == currentCoordinate) {
                     return move;
                 }
             }
