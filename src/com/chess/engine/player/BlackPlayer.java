@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class BlackPlayer extends Player{
@@ -20,7 +21,13 @@ public class BlackPlayer extends Player{
 
     @Override
     public Collection<Piece> getActivePieces() {
-        return this.playBoard.getBlackPieces();
+        List<Piece> blackPiecesNotTaken = new ArrayList<>();
+       for (Piece piece: playBoard.getBlackPieces()) {
+           if (!piece.getIsTaken()) {
+               blackPiecesNotTaken.add(piece);
+           }
+        }
+       return blackPiecesNotTaken;
     }
 
     @Override

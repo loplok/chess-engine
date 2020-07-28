@@ -410,7 +410,6 @@ public abstract class Move {
                  }
              }
              builder.setPiece(this.pieceThatMoved.movePiece(this));
-             //calling movePiece here doesn't work, we need to explicitly create a new Rook
              builder.setPiece(new Rook(this.castleRook.getPieceAlliance(), this.castleRookHeadingTo,false, false));
              builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
              builder.setMoveTransition(this);
