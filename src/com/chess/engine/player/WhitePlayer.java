@@ -52,7 +52,7 @@ public class WhitePlayer extends Player {
 
     @Override
     public String toString() {
-        return "White player ";
+        return "White player";
     }
 
     @Override

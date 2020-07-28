@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 public class Board {
 
+    // TODO time management, checkmate control and lastly board utils N moves form transition board, MoveTransition remake
+
     private final List<Tile> gameBoard;
 
     private final Collection<Piece> whitePieces;
