@@ -42,6 +42,28 @@ public class BlackPlayer extends Player{
     }
 
     @Override
+    public Collection<Move> getMovesFromTaken() {
+        final List<Move> legalMovesFromTaken = new ArrayList<>();
+        for (Piece piece: getTakenPieces()) {
+                if (piece.getIsTaken()) {
+                    legalMovesFromTaken.addAll(piece.calculateLegalMove(this.playBoard));
+                }
+        }
+        return legalMovesFromTaken;
+    }
+
+    @Override
+    public void addPiece(Piece piece) {
+        playBoard.addBlackPiece(piece);
+    }
+
+    @Override
+    public void removePiece(Piece piece) {
+        playBoard.blackPlayer().removePiece(piece);
+    }
+
+
+    @Override
     public Alliance getAlliance() {
         return Alliance.BLACK;
     }
@@ -67,7 +89,7 @@ public class BlackPlayer extends Player{
         final List<Move> kingCastles = new ArrayList<>();
 
         if (this.getPlayerKing().isFirstMove() && this.getPlayerKing().getPiecePosition() == 4 && !this.isInCheck()) {
-            //blacks king side castle
+            // white kingside
             if (this.playBoard.getPiece(5) == null && this.playBoard.getPiece(6) == null) {
                 final Piece kingSideRook = this.playBoard.getPiece(7);
                 if (kingSideRook != null && kingSideRook.isFirstMove() &&
@@ -83,7 +105,7 @@ public class BlackPlayer extends Player{
                     }
                 }
             }
-            //blacks queen side castle
+            // white queen side
             if (this.playBoard.getPiece(1) == null && this.playBoard.getPiece(2) == null &&
                     this.playBoard.getPiece(3) == null) {
                 final Piece queenSideRook = this.playBoard.getPiece(0);

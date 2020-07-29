@@ -22,14 +22,17 @@ public class Board {
     private final Collection<Piece> blackPieces;
 
 
+
     private final Pawn enPassantPawn;
     private final Move transitionMove;
 
-    private final Player currentPlayer;
 
-    private final WhitePlayer white;
-    private final BlackPlayer black;
+    private  Player currentPlayer;
 
+    private  WhitePlayer white;
+    private  BlackPlayer black;
+    Collection<Move> whiteLegalMoves;
+    Collection<Move> blackLegalMoves;
 
     private Board(final Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -38,8 +41,8 @@ public class Board {
         this.enPassantPawn = builder.EnPassantPawn;
 
 
-        final Collection<Move> whiteLegalMoves = calculate(this.whitePieces);
-        final Collection<Move> blackLegalMoves = calculate(this.blackPieces);
+        this.whiteLegalMoves = calculate(this.whitePieces);
+        this.blackLegalMoves = calculate(this.blackPieces);
 
         this.white = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
         this.black = new BlackPlayer(this, blackLegalMoves, whiteLegalMoves);
@@ -58,10 +61,21 @@ public class Board {
     // setters for taken Pieces;
     public void addWhitePiece(Piece whitePiece) {
         this.whitePieces.add(whitePiece);
+        whitePiece.setIsTaken(true);
     }
 
     public void addBlackPiece(Piece blackPiece) {
         this.blackPieces.add(blackPiece);
+        blackPiece.setIsTaken(true);
+    }
+
+    public void removeBlackPiece(Piece blackPiece) {
+        this.blackPieces.remove(blackPiece);
+        blackPiece.setIsTaken(false);
+    }
+
+    public void removeWhitePiece(Piece whitePiece) {
+        this.whitePieces.remove(whitePiece);
     }
 
 
@@ -119,7 +133,18 @@ public class Board {
         for(final Piece piece: pieces) {
             legalMoves.addAll(piece.calculateLegalMove(this));
         }
-        return ImmutableList.copyOf(legalMoves);
+        legalMoves.addAll(calculateFromTaken(pieces));
+        return legalMoves;
+    }
+
+    public Collection<Move> calculateFromTaken(final Collection<Piece> pieces) {
+        final List<Move> legalMovesFromTaken = new ArrayList<>();
+        for(final Piece piece: pieces) {
+            if (piece.getIsTaken()) {
+                legalMovesFromTaken.addAll(piece.calculateLegalMove(this));
+            }
+        }
+        return ImmutableList.copyOf(legalMovesFromTaken);
     }
 
     private static Collection<Piece> calculateActive(List<Tile> gameBoard, Alliance alliance) {

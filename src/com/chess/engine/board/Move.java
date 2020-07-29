@@ -445,7 +445,14 @@ public abstract class Move {
 
         @Override
         public boolean equals(final Object other) {
-            return this == other || other instanceof QueenSideCastleMove && super.equals(other);
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof KingSideCastleMove)) {
+                return false;
+            }
+            final KingSideCastleMove otherKingSideCastleMove = (KingSideCastleMove) other;
+            return super.equals(otherKingSideCastleMove) && this.castleRook.equals(otherKingSideCastleMove.getCastleRook());
         }
 
 
@@ -529,6 +536,17 @@ public abstract class Move {
                 }
             }
 
+            return NULL_MOVE;
+        }
+
+        public static Move createInsertMove(final Board board, final int destinationCoordinate,
+                                            final Piece.PieceType pieceType) {
+            for (final Move move: board.getAllMoves()) {
+                if (move.getDestinationCoordinate() == destinationCoordinate && move.isInsertMove()
+                && pieceType.toString().equals(move.pieceThatMoved.toString())) {
+                    return move;
+                }
+            }
             return NULL_MOVE;
         }
 

@@ -13,10 +13,11 @@ public class Main {
         Board first = Board.createStandardBoard();
         Board second = Board.secondBoard();
 
-        System.out.println("Choose depth of search algorithm(optimal between 3-6");
+        System.out.println("Choose time control for game in seconds");
         Scanner sc = new Scanner(System.in);
-        int depth = sc.nextInt();
-        BugHouseGame newGame = new BugHouseGame(first, second, depth);
+        int timer = sc.nextInt();
+
+        BugHouseGame newGame = new BugHouseGame(first, second, 10, timer);
 
     }
 }

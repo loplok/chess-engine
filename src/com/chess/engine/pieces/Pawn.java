@@ -64,7 +64,7 @@ public class Pawn extends Piece {
                                 || (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.pieceAlliance.isWhite()))) {
                     final int tileBehindTheCandidate = this.piecePosition + this.pieceAlliance.getDirection() * 8;
                     if (!board.getTile(tileBehindTheCandidate).isTileOccupied() &&
-                            !board.getTile(tileBehindTheCandidate).isTileOccupied()) {
+                            !board.getTile(candidateDestination).isTileOccupied()) {
                         legalMoves.add(new Move.PawnJump(board, this, candidateDestination));
                     }
                 }

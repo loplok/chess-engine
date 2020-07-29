@@ -41,7 +41,7 @@ public class TestPieces {
 
         assertTrue(transition3.getMoveStatus().isDone());
 
-        final MoveStrategy strat = new MiniMax(2);
+        final MoveStrategy strat = new MiniMax(2,0);
        final Move aiMove = strat.execute(transition3.getTransitionBoard());
         final Move best  = Move.MoveFactory.createMove(transition3.getTransitionBoard(),
                 BoardUtils.getCoordinateAtPosition("d8"), BoardUtils.getCoordinateAtPosition("h4"));

@@ -32,7 +32,8 @@ public final class PawnAnalyzer {
 
     public int pawnStructureScore(final Player player) {
         final int[] pawnsOnColumnTable = createPawnColumnTable(calculatePlayerPawns(player));
-        return calculatePawnColumnStack(pawnsOnColumnTable) + calculateIsolatedPawnPenalty(pawnsOnColumnTable);
+        return calculatePawnColumnStack(pawnsOnColumnTable) + calculateIsolatedPawnPenalty(pawnsOnColumnTable) +
+                calculatePawnPositionBonus(calculatePlayerPawns(player));
     }
 
     private static Collection<Piece> calculatePlayerPawns(final Player player) {
@@ -79,4 +80,47 @@ public final class PawnAnalyzer {
         return table;
     }
 
+    private static int calculatePawnPositionBonus(final Collection<Piece> playerPawns) {
+        int pawnBonus = 0;
+        for(final Piece playerPawn : playerPawns) {
+            pawnBonus += getPawnBonus(playerPawn);
+        }
+        return pawnBonus;
+    }
+
+    private static int getPawnBonus(Piece pawn) {
+        int pawnPosition = pawn.getPiecePosition();
+
+        if (18 >= pawnPosition && pawnPosition >= 16 ) {
+            return 3;
+        }
+        else if (21 >= pawnPosition && pawnPosition > 18 ) {
+            return 6;
+        } else if (23 >= pawnPosition && pawnPosition > 21 ) {
+            return 3;
+        }
+
+        else if (26 <= pawnPosition && pawnPosition >  24) {
+            return 8;
+        } else if (29 >= pawnPosition && pawnPosition >  26) {
+            return 12;
+        } else if (31 >= pawnPosition && pawnPosition >  29) {
+            return 8;
+        }
+        else if (34 <= pawnPosition && pawnPosition >  32) {
+            return 8;
+        } else if (37 >= pawnPosition && pawnPosition > 34) {
+            return 12;
+        } else if (39 >= pawnPosition && pawnPosition >  37) {
+            return 8;
+
+        } else if (42 <= pawnPosition && pawnPosition >  40) {
+            return 3;
+        } else if (45 >= pawnPosition && pawnPosition > 42) {
+            return 6;
+        } else if (47 >= pawnPosition && pawnPosition >  45) {
+            return 3;
+        }
+        return 0;
+    }
 }

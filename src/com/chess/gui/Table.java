@@ -210,7 +210,7 @@ public class Table extends Observable {
 
         @Override
         protected Move doInBackground() throws Exception {
-            MiniMax mini = new MiniMax(4);
+            MiniMax mini = new MiniMax(4,0);
             final Move best = mini.execute(Table.get().getGameBoard());
             return best;
         }

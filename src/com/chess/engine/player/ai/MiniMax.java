@@ -18,12 +18,30 @@ public class MiniMax implements MoveStrategy {
     private int quiescenceCount;
     private static final int QUIESCENCE = 10000;
     private int numBoardsEvaluated = 0;
+    private int cutOffs = 0;
+    private TimeEvaluator timerWhite;
+    private TimeEvaluator timerBlack;
+    private int secondsTotal;
+    private int movesPlayed = 0;
 
-    public MiniMax(final int depth) {
+    public MiniMax(final int depth, final int secondsTotal) {
         this.boardEvaluator =new StandardBoardEvaluator();
         this.depth = depth;
         this.quiescenceCount = 0;
+        this.secondsTotal = secondsTotal;
     }
+
+    public MiniMax(final int depth, final int secondsTotal,
+                   final TimeEvaluator timerWhite,
+                   final TimeEvaluator timerBlack) {
+        this.boardEvaluator =new StandardBoardEvaluator();
+        this.depth = depth;
+        this.quiescenceCount = 0;
+        this.secondsTotal = secondsTotal;
+        this.timerBlack = timerBlack;
+        this.timerWhite = timerWhite;
+    }
+
 
     @Override
     public String toString() {
@@ -31,41 +49,78 @@ public class MiniMax implements MoveStrategy {
     }
 
 
+
+    public BoardEvaluator getBoardEvaluator() {
+        return this.boardEvaluator;
+    }
+
+
     // TODO remake execute, take into consideration the taken pieces, when insert move, insert them into second board;
     @Override
     public Move execute(Board board) {
 
-        // final long startTime = System.currentTimeMillis();
+        int currentDepth = 1;
+
         int current;
         Move bestMove = null;
+
         int highest = Integer.MIN_VALUE;
         int lowest = Integer.MAX_VALUE;
+
         HashMap<Integer, Move> map = new HashMap<>();
-        int sizeOfMoves = board.getCurrentPlayer().getLegalMoves().size();
-        for (Move move: board.getCurrentPlayer().getLegalMoves()) {
-            final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
-            if (moveTransition.getMoveStatus().isDone()) {
-                current = board.getCurrentPlayer().getAlliance().isWhite() ?
-                        min(moveTransition.getTransitionBoard(), this.depth - 1, highest, lowest) :
-                        max(moveTransition.getTransitionBoard(), this.depth - 1, highest, lowest);
-                if (board.getCurrentPlayer().getAlliance().isWhite() && current > highest) {
-                    highest = current;
-                    bestMove = move;
-                    if(moveTransition.getTransitionBoard().blackPlayer().isInCheckMate()) {
-                        break;
-                    }
-                }
-                else if (board.getCurrentPlayer().getAlliance().isBlack() && current < lowest) {
-                    lowest = current;
-                    bestMove = move;
-                    if(moveTransition.getTransitionBoard().whitePlayer().isInCheckMate()) {
-                        break;
-                    }
-                }
-                map.put(this.boardEvaluator.evaluate(moveTransition.getTransitionBoard(), 0), move);
-            }
+
+        double timePerMove = 0;
+        Alliance allianceOnTurn;
+        if (board.getCurrentPlayer().getAlliance().isWhite()) {
+            timePerMove = timerWhite.openingTime(movesPlayed);
+            allianceOnTurn = Alliance.WHITE;
+        } else {
+            timePerMove = timerBlack.openingTime(movesPlayed);
+            allianceOnTurn = Alliance.BLACK;
         }
-        System.out.println(this.numBoardsEvaluated);
+
+        long finish = (long) (System.currentTimeMillis() + timePerMove);
+
+
+        while (System.currentTimeMillis() < finish) {
+            int sizeOfMoves = board.getCurrentPlayer().getLegalMoves().size();
+            Collection<Move> allMoves = new ArrayList<>(board.getCurrentPlayer().getLegalMoves());
+            allMoves.addAll(board.calculateFromTaken(board.getCurrentPlayer().getTakenPieces()));
+
+            for (Move move : allMoves) {
+                final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
+                if (moveTransition.getMoveStatus().isDone()) {
+                    current = board.getCurrentPlayer().getAlliance().isWhite() ?
+                            min(moveTransition.getTransitionBoard(), currentDepth - 1, highest, lowest) :
+                            max(moveTransition.getTransitionBoard(), currentDepth - 1 , highest, lowest);
+                    if (board.getCurrentPlayer().getAlliance().isWhite() && current > highest) {
+                        highest = current;
+                        bestMove = move;
+                        if (moveTransition.getTransitionBoard().blackPlayer().isInCheckMate()) {
+                            break;
+                        }
+                    } else if (board.getCurrentPlayer().getAlliance().isBlack() && current < lowest) {
+                        lowest = current;
+                        bestMove = move;
+                        if (moveTransition.getTransitionBoard().whitePlayer().isInCheckMate()) {
+                            break;
+                        }
+                    }
+                }
+            }
+            currentDepth++;
+        }
+
+        System.out.println("Evaluated " + this.numBoardsEvaluated + " boards at depth " + currentDepth +
+                " and found best move to be " + bestMove.toString() + " with " + this.cutOffs + " cutoffs produced");
+
+        if (allianceOnTurn == Alliance.WHITE) {
+            timerWhite.tick(timePerMove);
+        } else {
+            timerBlack.tick(timePerMove);
+        }
+        this.movesPlayed++;
+
         return bestMove;
     }
 
@@ -86,6 +141,7 @@ public class MiniMax implements MoveStrategy {
                 currentLowest = Math.min(currentLowest, max(toBoard,
                         depth -1,  highest, currentLowest));
                 if (currentLowest <= highest) {
+                    this.cutOffs++;
                     return highest;
                 }
             }
@@ -131,6 +187,7 @@ public class MiniMax implements MoveStrategy {
                 currentHighest = Math.max(currentHighest, min(toBoard,
                        depth - 1, currentHighest, lowest));
                 if (currentHighest >= lowest) {
+                    this.cutOffs++;
                     return lowest;
                 }
             }

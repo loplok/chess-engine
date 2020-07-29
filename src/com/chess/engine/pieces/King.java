@@ -61,7 +61,6 @@ public class King extends Piece{
     public Collection<Move> calculateLegalMove(Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
-        if(!isTaken) {
             for (final int currentCandidate : CANDIDATE_MOVE_COORDINATE) {
                 final int candidateDestination = this.piecePosition + currentCandidate;
 
@@ -87,9 +86,6 @@ public class King extends Piece{
                 }
             }
             return ImmutableList.copyOf(legalMoves);
-        } else {
-            return List.copyOf(getLegalMovesFromTaken(board));
-        }
     }
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == -1 ||

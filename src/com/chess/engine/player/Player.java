@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class Player {
     protected final Board playBoard;
     protected final King king;
-    protected final Collection<Move> legalMoves;
+    protected Collection<Move> legalMoves;
     private final boolean isInCheck;
 
 
@@ -26,19 +26,12 @@ public abstract class Player {
            final Collection<Move> opponentsMoves) {
         this.playBoard = board;
         this.king = createKing();
-        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastle(legalMoves,opponentsMoves)));
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastle(legalMoves,opponentsMoves),
+                getMovesFromTaken()));
         this.isInCheck = !calculateAttacks(this.king.getPiecePosition(), opponentsMoves).isEmpty();
     }
 
-    public void addWhitePiece(Piece whitePiece) {
-        whitePiece.setIsTaken(true);
-        this.playBoard.addWhitePiece(whitePiece);
-    }
 
-    public void addBlackPiece(Piece blackPiece) {
-        blackPiece.setIsTaken(true);
-        this.playBoard.addWhitePiece(blackPiece);
-    }
 
     protected static Collection<Move> calculateAttacks(int piecePosition,
                                             Collection<Move> opponentMoves) {
@@ -50,6 +43,8 @@ public abstract class Player {
         }
         return ImmutableList.copyOf(attackMove);
     }
+
+
 
 
 
@@ -70,6 +65,11 @@ public abstract class Player {
 
     public abstract Collection<Piece> getTakenPieces();
 
+    public abstract Collection<Move> getMovesFromTaken();
+
+    public abstract void addPiece(Piece piece);
+
+    public abstract void removePiece(Piece piece);
 
     public abstract Alliance getAlliance();
 
@@ -127,7 +127,7 @@ public abstract class Player {
     }
 
     public Collection<Move> getLegalMoves() {
-        return (this.legalMoves);
+        return legalMoves;
     }
 
     protected abstract Collection<Move> calculateKingCastle(Collection<Move> moves,Collection<Move> opponentsMoves);
